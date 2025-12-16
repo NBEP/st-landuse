@@ -5,19 +5,17 @@ def prep_geoscale(in_features, in_field, out_features):
     """
     prep_geoscale() projects input vectors to Albers Equal Conical Area and converts them to a raster.
 
-    :param in_features: Raster. Path and file name for input vector.
-    :param in_field: String. Field used to
-    :param out_features: Raster. Path and file name for output raster.
+    :param in_features: Path and file name for input vector.
+    :param in_field: String. Field used to set raster value. All other fields will be dropped.
+    :param out_features: Path and file name for output raster.
     """
-    in_features = str(in_features)
-    out_features = str(out_features)
     temp_shp = arcpy.env.scratchFolder + "/temp_projection.shp"
 
     print("\tProjecting to Albers Equal Conical Area")
     arcpy.management.Project(
         in_dataset=in_features,
         out_dataset=temp_shp,
-        out_coor_system="Albers"
+        out_coor_system="PROJCS[\"Albers_Conical_Equal_Area\",GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Albers\"],PARAMETER[\"false_easting\",0.0],PARAMETER[\"false_northing\",0.0],PARAMETER[\"central_meridian\",-96.0],PARAMETER[\"standard_parallel_1\",29.5],PARAMETER[\"standard_parallel_2\",45.5],PARAMETER[\"latitude_of_origin\",23.0],UNIT[\"Meter\",1.0]]"
     )
 
     print("\tSaving as raster")
@@ -36,13 +34,10 @@ def prep_nlcd(in_features, out_features, clip_boundaries):
     prep_nlcd() clips NLCD raster data to NBEP boundaries and reclassifies the data as 7 land types: Agricultural Land,
     Barren Land, Brushland, Forest Land, Urban or Build up, Water, and Wetland.
 
-    :param in_features: Raster. National land cover database layer.
-    :param out_features: Raster. Path and file name for output raster.
-    :param clip_boundaries: Raster. Template used to clip NLCD data to appropriate boundaries.
+    :param in_features: Raster NLCD layer.
+    :param out_features: Path and file name for output raster.
+    :param clip_boundaries: Vector template used to clip NLCD data to appropriate boundaries.
     """
-    in_features = str(in_features)
-    out_features = str(out_features)
-    clip_boundaries = str(clip_boundaries)
     temp_clip = arcpy.env.scratchFolder + "/temp_clip.tif"
 
     print("\tClipping to NBEP region")
