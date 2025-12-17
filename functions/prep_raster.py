@@ -1,13 +1,14 @@
 import arcpy
 
 
-def prep_geoscale(in_features, in_field, out_features):
+def prep_geoscale(in_features, in_field, out_features, out_coor_system):
     """
     prep_geoscale() projects input vectors to Albers Equal Conical Area and converts them to a raster.
 
     :param in_features: Path and file name for input vector.
     :param in_field: String. Field used to set raster value. All other fields will be dropped.
     :param out_features: Path and file name for output raster.
+    :param out_coor_system: Output coordinate system.
     """
     temp_shp = arcpy.env.scratchFolder + "/temp_projection.shp"
 
@@ -15,7 +16,7 @@ def prep_geoscale(in_features, in_field, out_features):
     arcpy.management.Project(
         in_dataset=in_features,
         out_dataset=temp_shp,
-        out_coor_system="PROJCS[\"Albers_Conical_Equal_Area\",GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Albers\"],PARAMETER[\"false_easting\",0.0],PARAMETER[\"false_northing\",0.0],PARAMETER[\"central_meridian\",-96.0],PARAMETER[\"standard_parallel_1\",29.5],PARAMETER[\"standard_parallel_2\",45.5],PARAMETER[\"latitude_of_origin\",23.0],UNIT[\"Meter\",1.0]]"
+        out_coor_system=out_coor_system
     )
 
     print("\tSaving as raster")
@@ -23,7 +24,8 @@ def prep_geoscale(in_features, in_field, out_features):
         in_features=temp_shp,
         value_field=in_field,
         out_rasterdataset=out_features,
-        cell_assignment="MAXIMUM_AREA"
+        cell_assignment="MAXIMUM_AREA",
+        cellsize=30
     )
 
     return
@@ -38,14 +40,13 @@ def prep_nlcd(in_features, out_features, clip_boundaries):
     :param out_features: Path and file name for output raster.
     :param clip_boundaries: Vector template used to clip NLCD data to appropriate boundaries.
     """
-    temp_clip = arcpy.env.scratchFolder + "/temp_clip.tif"
+    temp_clip = arcpy.env.scratchFolder + "/temp_box.tif"
 
     print("\tClipping to NBEP region")
     arcpy.management.Clip(
         in_raster=in_features,
         in_template_dataset=clip_boundaries,
-        out_raster=temp_clip,
-        maintain_clipping_extent="MAINTAIN_EXTENT"
+        out_raster=temp_clip
     )
 
     print("\tReclassifying land use")

@@ -13,28 +13,17 @@ def current_area(in_geoscale, geoscale_field, in_nlcd, nlcd_year):
     """
     out_table = arcpy.env.scratchFolder + "/temp_table.dbf"
 
-    print("\tCalculating area per", geoscale_field)
-    all_fields = arcpy.ListFields(in_geoscale)
-    if geoscale_field in all_fields:
-        arcpy.sa.TabulateArea(
-            in_zone_data=in_geoscale,
-            zone_field=geoscale_field,
-            in_class_data=in_nlcd,
-            class_field="LAND_USE",
-            out_table=out_table,
-            processing_cell_size=in_nlcd
-        )
-    else:
-        arcpy.sa.TabulateArea(
-            in_zone_data=in_geoscale,
-            zone_field="Value",
-            in_class_data=in_nlcd,
-            class_field="LAND_USE",
-            out_table=out_table,
-            processing_cell_size=in_nlcd
-        )
+    print("\tCalculating area")
+    arcpy.sa.TabulateArea(
+        in_zone_data=in_geoscale,
+        zone_field=geoscale_field,
+        in_class_data=in_nlcd,
+        class_field="LAND_USE",
+        out_table=out_table,
+        processing_cell_size=in_nlcd
+    )
 
-    print("\tConverting to pandas dataframe")
+    print("\tConverting to dataframe")
     df = arcpy.da.TableToNumPyArray(
         in_table=out_table,
         field_names="*"
@@ -43,10 +32,7 @@ def current_area(in_geoscale, geoscale_field, in_nlcd, nlcd_year):
 
     print("\tCalculating acres, % land")
     df['Geoscale'] = geoscale_field
-    if geoscale_field.upper() in df.columns:
-        df['Geoscale_Name'] = df[geoscale_field.upper()]
-    else:
-        df['Geoscale_Name'] = df["VALUE"]
+    df['Geoscale_Name'] = df[geoscale_field.upper()]
     df['Year'] = nlcd_year
     df['Agricultural_Acres'] = df['AGRICULTUR'] * 0.000001 * 247
     df['Barren_Acres'] = df['BARREN_LAN'] * 0.000001 * 247
