@@ -17,18 +17,26 @@ import pandas as pd
 base_folder = Path.cwd().parents[2] / "Data" / "int_tabulardata" / "landuse_int"
 
 # Define variables
-in_csv = base_folder / "NLCD_2024_NBEP2025.csv"
+in_csv = [
+    "NLCD_2001_NBEP2025.csv", "NLCD_2006_NBEP2025.csv", "NLCD_2011_NBEP2025.csv", "NLCD_2016_NBEP2025.csv",
+    "NLCD_2021_NBEP2025.csv", "NLCD_2024_NBEP2025.csv"
+]
 group_col = "Geoscale_Name"
 sort_col = ["Geoscale", group_col]
 
-out_csv = base_folder / "NLCD_change_2001_2024_NBEP2025"
+out_csv = base_folder / "NLCD_change_2001_2024_NBEP2025.csv"
 
 # RUN SCRIPT ----------------------------------------------------------------------------------------------------------
 if "Year" not in sort_col:
     sort_col.append("Year")
 
 print("\nIMPORTING DATA")
-df = pd.read_csv(in_csv)
+df = pd.DataFrame()
+for csv in in_csv:
+    print("Reading in", csv)
+    temp_csv = base_folder / csv
+    df_temp = pd.read_csv(temp_csv)
+    df = pd.concat([df, df_temp])
 
 print("\nCALCULATING CHANGE")
 print("Sorting data by", sort_col)

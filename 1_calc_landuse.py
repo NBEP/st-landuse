@@ -23,8 +23,8 @@ csv_folder = base_folder / "int_tabulardata" / "landuse_int"
 arcpy.env.workspace = str(base_folder / "int_gisdata" / "landuse_int")
 
 # Define INPUTS
-nlcd_year = 2024
-nlcd = "Annual_NLCD_LndCov_2024_CU_C1V1.tif"
+nlcd_year = 2016
+nlcd = "Annual_NLCD_LndCov_2016_CU_C1V1.tif"
 
 clip_boundaries = "landuse_int.gdb/source_copy/Town_Bay_Merge"  # Set bounding box
 clip_final = "landuse_int.gdb/source_copy/ALL_STUDYAREAS_NBEP2017"  # Clip NLCD for hub
