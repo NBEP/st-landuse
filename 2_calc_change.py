@@ -1,48 +1,57 @@
-# EXPLAIN WHAT THIS CODE DOES
+# ---------------------------------------------------------------------------
+# 2_calc_change.py
+# Authors: Mariel Sorlien
+# Python 3.7
+#
+# Description:
+# TEXT HERE
+#
+# REQUIRES GIS/ARCPY
+# ---------------------------------------------------------------------------
 
 # Import modules
-from functions import *
+from pathlib import Path
+import pandas as pd
 
-# Set working directory, projection
+# Set working directory, projection --------------------------------------------
+base_folder = Path.cwd().parents[2] / "Data" / "int_tabulardata" / "landuse_int"
 
-# Define INPUTS
+# Define variables
+in_csv = base_folder / "NLCD_2024_NBEP2025.csv"
+group_col = "Geoscale_Name"
+sort_col = ["Geoscale", group_col]
 
-# Define OUTPUTS
+out_csv = base_folder / "NLCD_change_2001_2024_NBEP2025"
 
-# Code ----
-# Flip this so BY AREA then BY THING
-print("Calculating change to forest acres")
-print("\tBy basin")
-print("\tBy HUC10")
-print("\tBy HUC12")
-print("\tBy study area")
-print("\tBy state by study area")
-print("\tBy town")
-print("\tBy town by study area")
+# RUN SCRIPT ----------------------------------------------------------------------------------------------------------
+if "Year" not in sort_col:
+    sort_col.append("Year")
 
-print("Exporting to csv")
+print("\nIMPORTING DATA")
+df = pd.read_csv(in_csv)
 
-print("Calculating change to developed acres")
-print("\tBy basin")
-print("\tBy HUC10")
-print("\tBy HUC12")
-print("\tBy study area")
-print("\tBy state by study area")
-print("\tBy town")
-print("\tBy town by study area")
+print("\nCALCULATING CHANGE")
+print("Sorting data by", sort_col)
+df.sort_values(by=sort_col, inplace=True)
+df.reset_index(drop=True, inplace=True)
+print("Calculating change")
+df['Prev_Year'] = df.Year.shift(1)
+df['Prev_Site'] = df[group_col].shift(1)
+df["Gross_Change_Forest_Acres"] = df["Forest_Acres"] - df["Forest_Acres"].shift(1)
+df["Percent_Change_Forest"] = df["Gross_Change_Forest_Acres"] / df["Forest_Acres"] * 100
+df["Gross_Change_Developed_Acres"] = df["Developed_Acres"] - df["Developed_Acres"].shift(1)
+df["Percent_Change_Developed"] = df["Gross_Change_Developed_Acres"] / df["Developed_Acres"] * 100
+print("Trimming data")
+df.drop(df[df.Year == df.Prev_Year].index, inplace=True)
+df.drop(df[df[group_col] != df.Prev_Site].index, inplace=True)
+print("Updating columns")
+df["Year"] = df.Year.astype(str) + "-" + df.Prev_Year.astype(str)
+keep_cols = sort_col + [
+    "Gross_Change_Forest_Acres", "Percent_Change_Forest", "Gross_Change_Developed_Acres", "Percent_Change_Developed"
+]
+df = df.reindex(columns=keep_cols)
 
-print("Exporting to csv")
+print("\nSAVING CSV")
+df.to_csv(out_csv)
 
-print("Calculating detailed change")
-print("\tBy basin")
-print("\tBy HUC10")
-print("\tBy HUC12")
-print("\tBy study area")
-print("\tBy state by study area")
-print("\tBy town")
-print("\tBy town by study area")
-
-print("Exporting to csv")
-
-print("\nSAVING RASTER")
-
+print("\nDONE")

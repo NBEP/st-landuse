@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# 2_calc_landuse.py
+# 1_calc_landuse.py
 # Authors: Mariel Sorlien
 # Python 3.7
 #
@@ -19,6 +19,7 @@ arcpy.env.overwriteOutput = True
 
 # Set working directory, projection --------------------------------------------
 base_folder = Path.cwd().parents[2] / "Data"
+csv_folder = base_folder / "int_tabulardata" / "landuse_int"
 arcpy.env.workspace = str(base_folder / "int_gisdata" / "landuse_int")
 
 # Define INPUTS
@@ -37,8 +38,8 @@ town = "landuse_int.gdb/source_copy/Town_Bay_Merge"
 town_studyarea = "landuse_int.gdb/geoscales/towns_by_studyarea"
 
 # Define OUTPUTS
-nlcd_final = "landuse_int.gdb/NLCD_2024_NBEP2025"
-csv_final = base_folder / "int_tabulardata" / "landuse_int" / "NLCD_2024_NBEP2025.csv"
+nlcd_final = "landuse_int.gdb/NLCD_" + str(nlcd_year) + "_NBEP2025"
+csv_final = "NLCD_" + str(nlcd_year) + "_NBEP2025.csv"
 
 # RUN SCRIPT ----------------------------------------------------------------------------------------------------------
 temp_buffer = arcpy.env.scratchFolder + "/temp_buffer.shp"
@@ -181,7 +182,7 @@ df_acres = pd.concat([df_acres, df_temp])
 
 print("\nDOWNLOADING FILES")
 print("Saving csv")
-df_acres.to_csv(csv_final)
+df_acres.to_csv(csv_folder / csv_final)
 
 print("Saving raster")
 print("\tProjecting to UTM Zone 19N NAD 1983")
