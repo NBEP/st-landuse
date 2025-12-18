@@ -23,18 +23,31 @@ csv_folder = base_folder / "int_tabulardata" / "landuse_int"
 arcpy.env.workspace = str(base_folder / "int_gisdata" / "landuse_int")
 
 # Define INPUTS
-nlcd_year = 2001
-nlcd = "Annual_NLCD_LndCov_2001_CU_C1V1.tif"
+nlcd_year = 2024
+nlcd = "Annual_NLCD_LndCov_" + str(nlcd_year) + "_CU_C1V1.tif"
 
 clip_boundaries = "landuse_int.gdb/geoscales/town_and_bay"
 
 basins = "landuse_int.gdb/source_copy/BASINS_NBEP2017"
+basins_field = "Basin"
+
 huc10 = "landuse_int.gdb/source_copy/HUC10_NBEP2017"
+huc10_field = "HUC10_Name"
+
 huc12 = "landuse_int.gdb/source_copy/HUC12_NBEP2017"
+huc12_field = "HUC12"  # Must include ID, since multiple HUC12 with same name
+
 studyarea = "landuse_int.gdb/source_copy/STUDYAREAS_NBEP2017"
+studyarea_field = "Study_Area"
+
 state_studyarea = "landuse_int.gdb/geoscales/states_by_studyarea"
+state_field = "State_Area"  # Must include state AND study area
+
 town = "landuse_int.gdb/geoscales/town_and_bay"
+town_field = "Town_State"  # Must include town AND state
+
 town_studyarea = "landuse_int.gdb/geoscales/towns_by_studyarea"
+town_studyarea_field = "Town_Area"  # Must include town, state, AND study area
 
 # Define OUTPUTS
 nlcd_final = "landuse_int.gdb/NLCD_" + str(nlcd_year) + "_NBEP2025"
@@ -78,13 +91,13 @@ print("\nCALCULATING AREA")
 print("Per basin")
 prep_raster.prep_geoscale(
     in_features=basins,
-    in_field="Basin",
+    in_field=basins_field,
     out_features=temp_raster,
     out_coor_system=spatial_ref
 )
 df_acres = calc_area.current_area(
     in_geoscale=temp_raster,
-    geoscale_field="Basin",
+    geoscale_field=basins_field,
     in_nlcd=temp_nlcd,
     nlcd_year=nlcd_year
 )
@@ -92,13 +105,13 @@ df_acres = calc_area.current_area(
 print("Per HUC10")
 prep_raster.prep_geoscale(
     in_features=huc10,
-    in_field="HUC10_Name",
+    in_field=huc10_field,
     out_features=temp_raster,
     out_coor_system=spatial_ref
 )
 df_temp = calc_area.current_area(
     in_geoscale=temp_raster,
-    geoscale_field="HUC10_Name",
+    geoscale_field=huc10_field,
     in_nlcd=temp_nlcd,
     nlcd_year=nlcd_year
 )
@@ -107,13 +120,13 @@ df_acres = pd.concat([df_acres, df_temp])
 print("Per HUC12")
 prep_raster.prep_geoscale(
     in_features=huc12,
-    in_field="HUC12",  # Can't use name because 2 different HUC12 watersheds named "Mill River"
+    in_field=huc12_field,
     out_features=temp_raster,
     out_coor_system=spatial_ref
 )
 df_temp = calc_area.current_area(
     in_geoscale=temp_raster,
-    geoscale_field="HUC12",
+    geoscale_field=huc12_field,
     in_nlcd=temp_nlcd,
     nlcd_year=nlcd_year
 )
@@ -122,13 +135,13 @@ df_acres = pd.concat([df_acres, df_temp])
 print("Per study area")
 prep_raster.prep_geoscale(
     in_features=studyarea,
-    in_field="Study_Area",
+    in_field=studyarea_field,
     out_features=temp_raster,
     out_coor_system=spatial_ref
 )
 df_temp = calc_area.current_area(
     in_geoscale=temp_raster,
-    geoscale_field="Study_Area",
+    geoscale_field=studyarea_field,
     in_nlcd=temp_nlcd,
     nlcd_year=nlcd_year
 )
@@ -137,13 +150,13 @@ df_acres = pd.concat([df_acres, df_temp])
 print("Per state per study area")
 prep_raster.prep_geoscale(
     in_features=state_studyarea,
-    in_field="State_Area",  # Column must contain State AND Study Area
+    in_field=state_field,
     out_features=temp_raster,
     out_coor_system=spatial_ref
 )
 df_temp = calc_area.current_area(
     in_geoscale=temp_raster,
-    geoscale_field="State_Area",
+    geoscale_field=state_field,
     in_nlcd=temp_nlcd,
     nlcd_year=nlcd_year
 )
@@ -152,13 +165,13 @@ df_acres = pd.concat([df_acres, df_temp])
 print("Per town")
 prep_raster.prep_geoscale(
     in_features=town,
-    in_field="Town_State",  # Column must contain Town AND State (Hopkinton RI & Hopkinto MA...)
+    in_field=town_field,
     out_features=temp_raster,
     out_coor_system=spatial_ref
 )
 df_temp = calc_area.current_area(
     in_geoscale=temp_raster,
-    geoscale_field="Town_State",
+    geoscale_field=town_field,
     in_nlcd=temp_nlcd,
     nlcd_year=nlcd_year
 )
@@ -167,13 +180,13 @@ df_acres = pd.concat([df_acres, df_temp])
 print("Per town per study area")
 prep_raster.prep_geoscale(
     in_features=town_studyarea,
-    in_field="Town_Area",  # Column must contain Town, State, AND Study Area
+    in_field=town_studyarea_field,
     out_features=temp_raster,
     out_coor_system=spatial_ref
 )
 df_temp = calc_area.current_area(
     in_geoscale=temp_raster,
-    geoscale_field="Town_Area",
+    geoscale_field=town_studyarea_field,
     in_nlcd=temp_nlcd,
     nlcd_year=nlcd_year
 )

@@ -20,11 +20,11 @@ base_folder = Path.cwd().parents[2] / "Data" / "int_tabulardata" / "landuse_int"
 
 # Define variables
 in_csv = [
-    "NLCD_2001_NBEP2025.csv", "NLCD_2006_NBEP2025.csv", "NLCD_2011_NBEP2025.csv", "NLCD_2016_NBEP2025.csv",
-    "NLCD_2021_NBEP2025.csv", "NLCD_2024_NBEP2025.csv"
+    "NLCD_2000_NBEP2025.csv", "NLCD_2005_NBEP2025.csv", "NLCD_2010_NBEP2025.csv", "NLCD_2015_NBEP2025.csv",
+    "NLCD_2020_NBEP2025.csv", "NLCD_2024_NBEP2025.csv"
 ]
 group_col = "Geoscale_Name"
-sort_col = ["Geoscale", group_col]
+sort_col = ["Geoscale", group_col, "Year"]
 
 source_year = 2025
 nbep_year = 2025
