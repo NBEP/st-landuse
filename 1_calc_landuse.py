@@ -23,18 +23,17 @@ csv_folder = base_folder / "int_tabulardata" / "landuse_int"
 arcpy.env.workspace = str(base_folder / "int_gisdata" / "landuse_int")
 
 # Define INPUTS
-nlcd_year = 2016
-nlcd = "Annual_NLCD_LndCov_2016_CU_C1V1.tif"
+nlcd_year = 2001
+nlcd = "Annual_NLCD_LndCov_2001_CU_C1V1.tif"
 
-clip_boundaries = "landuse_int.gdb/source_copy/Town_Bay_Merge"  # Set bounding box
-clip_final = "landuse_int.gdb/source_copy/ALL_STUDYAREAS_NBEP2017"  # Clip NLCD for hub
+clip_boundaries = "landuse_int.gdb/geoscales/town_and_bay"
 
 basins = "landuse_int.gdb/source_copy/BASINS_NBEP2017"
 huc10 = "landuse_int.gdb/source_copy/HUC10_NBEP2017"
 huc12 = "landuse_int.gdb/source_copy/HUC12_NBEP2017"
 studyarea = "landuse_int.gdb/source_copy/STUDYAREAS_NBEP2017"
 state_studyarea = "landuse_int.gdb/geoscales/states_by_studyarea"
-town = "landuse_int.gdb/source_copy/Town_Bay_Merge"
+town = "landuse_int.gdb/geoscales/town_and_bay"
 town_studyarea = "landuse_int.gdb/geoscales/towns_by_studyarea"
 
 # Define OUTPUTS
@@ -108,13 +107,13 @@ df_acres = pd.concat([df_acres, df_temp])
 print("Per HUC12")
 prep_raster.prep_geoscale(
     in_features=huc12,
-    in_field="HUC12_Name",
+    in_field="HUC12",  # Can't use name because 2 different HUC12 watersheds named "Mill River"
     out_features=temp_raster,
     out_coor_system=spatial_ref
 )
 df_temp = calc_area.current_area(
     in_geoscale=temp_raster,
-    geoscale_field="HUC12_Name",
+    geoscale_field="HUC12",
     in_nlcd=temp_nlcd,
     nlcd_year=nlcd_year
 )
@@ -138,7 +137,7 @@ df_acres = pd.concat([df_acres, df_temp])
 print("Per state per study area")
 prep_raster.prep_geoscale(
     in_features=state_studyarea,
-    in_field="State_Area",
+    in_field="State_Area",  # Column must contain State AND Study Area
     out_features=temp_raster,
     out_coor_system=spatial_ref
 )
@@ -153,13 +152,13 @@ df_acres = pd.concat([df_acres, df_temp])
 print("Per town")
 prep_raster.prep_geoscale(
     in_features=town,
-    in_field="Town_Name",
+    in_field="Town_State",  # Column must contain Town AND State (Hopkinton RI & Hopkinto MA...)
     out_features=temp_raster,
     out_coor_system=spatial_ref
 )
 df_temp = calc_area.current_area(
     in_geoscale=temp_raster,
-    geoscale_field="Town_Name",
+    geoscale_field="Town_State",
     in_nlcd=temp_nlcd,
     nlcd_year=nlcd_year
 )
@@ -168,7 +167,7 @@ df_acres = pd.concat([df_acres, df_temp])
 print("Per town per study area")
 prep_raster.prep_geoscale(
     in_features=town_studyarea,
-    in_field="Town_Area",
+    in_field="Town_Area",  # Column must contain Town, State, AND Study Area
     out_features=temp_raster,
     out_coor_system=spatial_ref
 )
@@ -195,7 +194,7 @@ print("\tClipping data")
 arcpy.management.Clip(
     in_raster=temp_raster,
     out_raster=nlcd_final,
-    in_template_dataset=clip_final,
+    in_template_dataset=clip_boundaries,
     clipping_geometry="ClippingGeometry"
 )
 print("\nDONE")
