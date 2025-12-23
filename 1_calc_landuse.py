@@ -27,6 +27,7 @@ nlcd_year = 2024
 nlcd = "Annual_NLCD_LndCov_" + str(nlcd_year) + "_CU_C1V1.tif"
 
 clip_boundaries = "landuse_int.gdb/geoscales/town_and_bay"
+colormap = Path.cwd() / "colormap.clr"
 
 basins = "landuse_int.gdb/source_copy/BASINS_NBEP2017"
 basins_field = "Basin"
@@ -84,7 +85,8 @@ print("Formatting NLCD data")
 prep_raster.prep_nlcd(
     in_features=nlcd,
     out_features=temp_nlcd,
-    clip_boundaries=temp_clip
+    clip_boundaries=temp_clip,
+    colormap=str(colormap)
 )
 
 print("\nCALCULATING AREA")

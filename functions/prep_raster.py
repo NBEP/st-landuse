@@ -31,7 +31,7 @@ def prep_geoscale(in_features, in_field, out_features, out_coor_system):
     return
 
 
-def prep_nlcd(in_features, out_features, clip_boundaries):
+def prep_nlcd(in_features, out_features, clip_boundaries, colormap):
     """
     prep_nlcd() clips NLCD raster data to NBEP boundaries and reclassifies the data as 7 land types: Agricultural Land,
     Barren Land, Brushland, Forest Land, Urban or Build up, Water, and Wetland.
@@ -39,6 +39,7 @@ def prep_nlcd(in_features, out_features, clip_boundaries):
     :param in_features: Raster NLCD layer.
     :param out_features: Path and file name for output raster.
     :param clip_boundaries: Vector template used to clip NLCD data to appropriate boundaries.
+    :param colormap: CLR file containing color map for output raster.
     """
     temp_clip = arcpy.env.scratchFolder + "/temp_box.tif"
 
@@ -83,6 +84,12 @@ def prep_nlcd(in_features, out_features, clip_boundaries):
             }
             return reclass.get(Value)
             """
+    )
+
+    print("\tAdding color ramp")
+    arcpy.management.AddColormap(
+        in_raster=out_features,
+        input_CLR_file=colormap
     )
 
     return
