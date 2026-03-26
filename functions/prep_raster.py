@@ -55,7 +55,7 @@ def prep_nlcd(in_features, out_features, clip_boundaries, colormap):
     new_class = arcpy.sa.Reclassify(
         temp_clip,
         reclass_field="Value",
-        remap="0 NODATA;11 1;21 2;22 2;23 2;24 2;31 3;41 4;42 4;43 4;52 5;71 7;81 8;82 8;90 9;95 9",
+        remap="0 NODATA;11 1;21 21;22 22;23 23;24 24;31 3;41 4;42 4;43 4;52 5;71 7;81 8;82 8;90 9;95 9",
         missing_values="NODATA"
     )
     new_class.save(out_features)
@@ -74,7 +74,10 @@ def prep_nlcd(in_features, out_features, clip_boundaries, colormap):
         code_block="""def Reclass(Value):
             reclass = {
                 1: \"Water\",
-                2: \"Developed\",
+                21: \"Dev_Open\",
+                22: \"Dev_Low\",
+                23: \"Dev_Med\",
+                24: \"Dev_High\",
                 3: \"Barren\",
                 4: \"Forest\",
                 5: \"Brushland\",

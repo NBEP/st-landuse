@@ -70,6 +70,18 @@ df["Gross_Change_Forest_Acres"] = df["Forest_Acres"] - df["Forest_Acres"].shift(
 df["Percent_Change_Forest"] = df["Gross_Change_Forest_Acres"] / df["Forest_Acres"].shift(1) * 100
 df["Gross_Change_Developed_Acres"] = df["Developed_Acres"] - df["Developed_Acres"].shift(1)
 df["Percent_Change_Developed"] = df["Gross_Change_Developed_Acres"] / df["Developed_Acres"].shift(1) * 100
+df["Gross_Change_Open_Developed_Acres"] = df["Open_Developed_Acres"] - df["Open_Developed_Acres"].shift(1)
+df["Percent_Change_Open_Developed"] = (df["Gross_Change_Open_Developed_Acres"] / df["Open_Developed_Acres"].shift(1)
+                                       * 100)
+df["Gross_Change_Low_Developed_Acres"] = df["Low_Developed_Acres"] - df["Low_Developed_Acres"].shift(1)
+df["Percent_Change_Low_Developed"] = df["Gross_Change_Low_Developed_Acres"] / df["Low_Developed_Acres"].shift(1) * 100
+df["Gross_Change_Medium_Developed_Acres"] = df["Medium_Developed_Acres"] - df["Medium_Developed_Acres"].shift(1)
+df["Percent_Change_Medium_Developed"] = (df["Gross_Change_Medium_Developed_Acres"] /
+                                         df["Medium_Developed_Acres"].shift(1) * 100)
+df["Gross_Change_High_Developed_Acres"] = df["High_Developed_Acres"] - df["High_Developed_Acres"].shift(1)
+df["Percent_Change_High_Developed"] = (df["Gross_Change_High_Developed_Acres"] / df["High_Developed_Acres"].shift(1)
+                                       * 100)
+
 print("Trimming data")
 df.drop(df[df.Year == df.Prev_Year].index, inplace=True)
 df.drop(df[df[group_col] != df.Prev_Site].index, inplace=True)
@@ -77,7 +89,10 @@ print("Updating columns")
 df["Year"] = df.Prev_Year.astype(str) + "-" + df.Year.astype(str)
 df["Year"] = df["Year"].str.replace(".0", "", regex=False)
 keep_cols = sort_col + [
-    "Gross_Change_Forest_Acres", "Percent_Change_Forest", "Gross_Change_Developed_Acres", "Percent_Change_Developed"
+    "Gross_Change_Forest_Acres", "Percent_Change_Forest", "Gross_Change_Developed_Acres", "Percent_Change_Developed",
+    "Gross_Change_Open_Developed_Acres", "Percent_Change_Open_Developed", "Gross_Change_Low_Developed_Acres",
+    "Percent_Change_Low_Developed", "Gross_Change_Medium_Developed_Acres", "Percent_Change_Medium_Developed",
+    "Gross_Change_High_Developed_Acres", "Percent_Change_High_Developed"
 ]
 df = df.reindex(columns=keep_cols)
 
