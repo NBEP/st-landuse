@@ -13,6 +13,7 @@
 from pathlib import Path
 import arcpy
 import pandas as pd
+from functions import *
 
 arcpy.env.overwriteOutput = True
 
@@ -60,10 +61,16 @@ nlcd_final = "landuse_int.gdb/NLCD_2000_2024_NBEP2026"
 csv_final = "LanduseChange_2000_2024_NBEP2026.csv"
 
 # RUN SCRIPT ----------------------------------------------------------------------------------------------------------
-temp_buffer = arcpy.env.scratchFolder + "/temp_buffer.shp"
-temp_clip = arcpy.env.scratchFolder + "/temp_boundaries.shp"
+# temp_buffer = arcpy.env.scratchFolder + "/temp_buffer.shp"
+# temp_clip = arcpy.env.scratchFolder + "/temp_boundaries.shp"
 temp_nlcd = arcpy.env.scratchFolder + "/temp_nlcd.tif"
 temp_raster = arcpy.env.scratchFolder + "/temp_raster.tif"
+
+print("\nSETTING DEFAULT VALUES")
+print("Setting snap raster")
+arcpy.env.snapRaster = start_raster
+print("Retrieving NLCD spatial reference")
+spatial_ref = arcpy.Describe(start_raster).spatialReference
 
 print("\nMAPPING LANDUSE CHANGE")
 print("Generating change raster")
@@ -82,13 +89,132 @@ nlcd_filter = arcpy.sa.ExtractByAttributes(
     where_clause="Class_From IN ('Dev_High', 'Dev_Low', 'Dev_Med', 'Dev_Open', 'Forest') Or "
                  "Class_To IN ('Dev_High', 'Dev_Low', 'Dev_Med', 'Dev_Open', 'Forest')"
 )
-nlcd_filter.save(temp_raster)
+nlcd_filter.save(temp_nlcd)
+print("Updating fields")
+with arcpy.da.UpdateCursor(temp_nlcd, field_names="Class_Name") as cursor:
+    for row in cursor:
+        row[0] = row[0].replace("->", "_")
+        row[0] = row[0].replace("Water", "1")
+        row[0] = row[0].replace("Dev_Open", "21")
+        row[0] = row[0].replace("Dev_Low", "22")
+        row[0] = row[0].replace("Dev_Med", "23")
+        row[0] = row[0].replace("Dev_High", "24")
+        row[0] = row[0].replace("Barren", "3")
+        row[0] = row[0].replace("Forest", "4")
+        row[0] = row[0].replace("Brushland", "5")
+        row[0] = row[0].replace("Grassland", "7")
+        row[0] = row[0].replace("Agriculture", "8")
+        row[0] = row[0].replace("Wetland", "9")
+        cursor.updateRow(row)
 
 # QUERY: USE RAW NLCD DATA?
+# QUERY: IS ACRE CALCULATION CORRECT IF NOT USING RAW NLCD DATA? (PROJECTION ISSUES)
 
-# Rename class name to code system - eg 2_3 for class 2 to class 3
-# Rewrite calc_acre function for this use case
-# For output csv - one for to/from forest and one for to/from dev? To keep # columns SLIGHTLY manageable?
-# (~20 for forest, ~45 for dev)
-# could flatten further by grouping dev as 1 category except when looking at changes from dev to dev?
-# Then it's 14 columns for forest, 7 + 7 + 4 * 4 = 14 + 16 = 30 columns for dev
+print("\nCALCULATING AREA")
+print("Per basin")
+prep_raster.prep_geoscale(
+    in_features=basins,
+    in_field=basins_field,
+    out_features=temp_raster,
+    out_coor_system=spatial_ref
+)
+df_acres = calc_area.change_area(
+    in_geoscale=temp_raster,
+    geoscale_field=basins_field,
+    in_nlcd=temp_nlcd,
+    year_range=year_range
+)
+
+print("Per HUC10")
+prep_raster.prep_geoscale(
+    in_features=huc10,
+    in_field=huc10_field,
+    out_features=temp_raster,
+    out_coor_system=spatial_ref
+)
+df_temp = calc_area.change_area(
+    in_geoscale=temp_raster,
+    geoscale_field=huc10_field,
+    in_nlcd=temp_nlcd,
+    year_range=year_range
+)
+df_acres = pd.concat([df_acres, df_temp])
+
+print("Per HUC12")
+prep_raster.prep_geoscale(
+    in_features=huc12,
+    in_field=huc12_field,
+    out_features=temp_raster,
+    out_coor_system=spatial_ref
+)
+df_temp = calc_area.change_area(
+    in_geoscale=temp_raster,
+    geoscale_field=huc12_field,
+    in_nlcd=temp_nlcd,
+    year_range=year_range
+)
+df_acres = pd.concat([df_acres, df_temp])
+
+print("Per study area")
+prep_raster.prep_geoscale(
+    in_features=studyarea,
+    in_field=studyarea_field,
+    out_features=temp_raster,
+    out_coor_system=spatial_ref
+)
+df_temp = calc_area.change_area(
+    in_geoscale=temp_raster,
+    geoscale_field=studyarea_field,
+    in_nlcd=temp_nlcd,
+    year_range=year_range
+)
+df_acres = pd.concat([df_acres, df_temp])
+
+print("Per state per study area")
+prep_raster.prep_geoscale(
+    in_features=state_studyarea,
+    in_field=state_field,
+    out_features=temp_raster,
+    out_coor_system=spatial_ref
+)
+df_temp = calc_area.change_area(
+    in_geoscale=temp_raster,
+    geoscale_field=state_field,
+    in_nlcd=temp_nlcd,
+    year_range=year_range
+)
+df_acres = pd.concat([df_acres, df_temp])
+
+print("Per town")
+prep_raster.prep_geoscale(
+    in_features=town,
+    in_field=town_field,
+    out_features=temp_raster,
+    out_coor_system=spatial_ref
+)
+df_temp = calc_area.change_area(
+    in_geoscale=temp_raster,
+    geoscale_field=town_field,
+    in_nlcd=temp_nlcd,
+    year_range=year_range
+)
+df_acres = pd.concat([df_acres, df_temp])
+
+print("Per town per study area")
+prep_raster.prep_geoscale(
+    in_features=town_studyarea,
+    in_field=town_studyarea_field,
+    out_features=temp_raster,
+    out_coor_system=spatial_ref
+)
+df_temp = calc_area.change_area(
+    in_geoscale=temp_raster,
+    geoscale_field=town_studyarea_field,
+    in_nlcd=temp_nlcd,
+    year_range=year_range
+)
+df_acres = pd.concat([df_acres, df_temp])
+
+print("\nDOWNLOADING FILES")
+print("Saving csv")
+df_acres.to_csv(csv_folder / csv_final)
