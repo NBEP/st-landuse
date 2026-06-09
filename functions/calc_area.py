@@ -44,8 +44,10 @@ def current_area(in_geoscale, geoscale_field, in_nlcd, nlcd_year):
     df["Low_Developed_Acres"] = df["DEV_LOW"] * 0.000001 * 247
     df["Medium_Developed_Acres"] = df["DEV_MED"] * 0.000001 * 247
     df["High_Developed_Acres"] = df["DEV_HIGH"] * 0.000001 * 247
-    df["Developed_Acres"] = (df["Open_Developed_Acres"] + df["Low_Developed_Acres"]
-                                   + df["Medium_Developed_Acres"] + df["High_Developed_Acres"])
+    df["Developed_Acres"] = (
+            df["Open_Developed_Acres"] + df["Low_Developed_Acres"] + df["Medium_Developed_Acres"] +
+            df["High_Developed_Acres"]
+    )
     df["Water_Acres"] = df["WATER"] * 0.000001 * 247
     df["Wetland_Acres"] = df["WETLAND"] * 0.000001 * 247
     df["Total_Acres"] = (
@@ -73,7 +75,7 @@ def change_area(in_geoscale, geoscale_field, in_nlcd, year_range):
     """
     change_area() generates a table containing a summary of acres land that changed land use type. The data is
     summarized at the relevant geoscale.
-    
+
     :param in_geoscale: Path and file name for raster geoscale.
     :param geoscale_field: String. Name of field containing geoscale names.
     :param in_nlcd: Path and file name for NLCD raster.

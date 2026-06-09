@@ -51,13 +51,13 @@ town_studyarea = "landuse_int.gdb/geoscales/towns_by_studyarea"
 town_studyarea_field = "Town_Area"  # Must include town, state, AND study area
 
 # Define OUTPUTS
-nlcd_final = "landuse_int.gdb/NLCD_" + str(nlcd_year) + "_NBEP2025"
-csv_final = "NLCD_" + str(nlcd_year) + "_NBEP2025.csv"
+nlcd_final = "landuse_int.gdb/NLCD_" + str(nlcd_year) + "_NBEP2026"
+csv_final = "NLCD_" + str(nlcd_year) + "_NBEP2026.csv"
 
 # RUN SCRIPT ----------------------------------------------------------------------------------------------------------
 temp_buffer = arcpy.env.scratchFolder + "/temp_buffer.shp"
 temp_clip = arcpy.env.scratchFolder + "/temp_boundaries.shp"
-temp_nlcd = arcpy.env.scratchFolder + "/temp_nlcd.tif"
+temp_nlcd = "temp_nlcd.tif"
 temp_raster = arcpy.env.scratchFolder + "/temp_raster.tif"
 
 print("\nSETTING DEFAULT VALUES")
@@ -68,11 +68,11 @@ spatial_ref = arcpy.Describe(nlcd).spatialReference
 
 print("\nPROCESSING", nlcd_year, "NLCD DATA")
 print("Setting clip boundaries")
-print("\tAdding 100m buffer")
+print("\tAdding 30m buffer")
 arcpy.analysis.Buffer(
     in_features=clip_boundaries,
     out_feature_class=temp_buffer,
-    buffer_distance_or_field="100 Meters",
+    buffer_distance_or_field="30 Meters",
     dissolve_option="ALL"
 )
 print("\tProjecting to Albers")
@@ -209,7 +209,7 @@ print("\tClipping data")
 arcpy.management.Clip(
     in_raster=temp_raster,
     out_raster=nlcd_final,
-    in_template_dataset=clip_boundaries,
+    in_template_dataset=temp_buffer,
     clipping_geometry="ClippingGeometry"
 )
 print("\nDONE")
