@@ -40,13 +40,13 @@ def current_area(in_geoscale, geoscale_field, in_nlcd, nlcd_year):
     df["Shrubland_Acres"] = df["BRUSHLAND"] * 0.000001 * 247
     df["Grassland_Acres"] = df["GRASSLAND"] * 0.000001 * 247
     df["Forest_Acres"] = df["FOREST"] * 0.000001 * 247
-    df["Open_Developed_Acres"] = df["DEV_OPEN"] * 0.000001 * 247
-    df["Low_Developed_Acres"] = df["DEV_LOW"] * 0.000001 * 247
-    df["Medium_Developed_Acres"] = df["DEV_MED"] * 0.000001 * 247
-    df["High_Developed_Acres"] = df["DEV_HIGH"] * 0.000001 * 247
+    df["Developed_Open_Acres"] = df["DEV_OPEN"] * 0.000001 * 247
+    df["Developed_Low_Acres"] = df["DEV_LOW"] * 0.000001 * 247
+    df["Developed_Medium_Acres"] = df["DEV_MED"] * 0.000001 * 247
+    df["Developed_High_Acres"] = df["DEV_HIGH"] * 0.000001 * 247
     df["Developed_Acres"] = (
-            df["Open_Developed_Acres"] + df["Low_Developed_Acres"] + df["Medium_Developed_Acres"] +
-            df["High_Developed_Acres"]
+            df["Developed_Open_Acres"] + df["Developed_Low_Acres"] + df["Developed_Medium_Acres"] +
+            df["Developed_High_Acres"]
     )
     df["Water_Acres"] = df["WATER"] * 0.000001 * 247
     df["Wetland_Acres"] = df["WETLAND"] * 0.000001 * 247
@@ -54,17 +54,17 @@ def current_area(in_geoscale, geoscale_field, in_nlcd, nlcd_year):
             df["Agricultural_Acres"] + df["Barren_Acres"] + df["Shrubland_Acres"] + df["Grassland_Acres"] +
             df["Forest_Acres"] + df["Developed_Acres"] + df["Water_Acres"] + df["Wetland_Acres"]
     )
-    df["Percent_Open_Developed"] = df["Open_Developed_Acres"] / df["Total_Acres"] * 100
-    df["Percent_Low_Developed"] = df["Low_Developed_Acres"] / df["Total_Acres"] * 100
-    df["Percent_Medium_Developed"] = df["Medium_Developed_Acres"] / df["Total_Acres"] * 100
-    df["Percent_High_Developed"] = df["High_Developed_Acres"] / df["Total_Acres"] * 100
+    df["Percent_Developed_Open"] = df["Developed_Open_Acres"] / df["Total_Acres"] * 100
+    df["Percent_Developed_Low"] = df["Developed_Low_Acres"] / df["Total_Acres"] * 100
+    df["Percent_Developed_Medium"] = df["Developed_Medium_Acres"] / df["Total_Acres"] * 100
+    df["Percent_Developed_High"] = df["Developed_High_Acres"] / df["Total_Acres"] * 100
     df["Percent_Developed"] = df["Developed_Acres"] / df["Total_Acres"] * 100
     df["Percent_Forest"] = df["Forest_Acres"] / df["Total_Acres"] * 100
     df = df[[
-        "Geoscale", "Geoscale_Name", "Year",  "Percent_Forest", "Percent_Developed", "Percent_Open_Developed",
-        "Percent_Low_Developed", "Percent_Medium_Developed", "Percent_High_Developed", "Agricultural_Acres",
-        "Barren_Acres", "Shrubland_Acres", "Grassland_Acres", "Forest_Acres", "Developed_Acres", "Open_Developed_Acres",
-        "Low_Developed_Acres", "Medium_Developed_Acres", "High_Developed_Acres", "Water_Acres", "Wetland_Acres",
+        "Geoscale", "Geoscale_Name", "Year", "Percent_Forest", "Percent_Developed", "Percent_Developed_Open",
+        "Percent_Developed_Low", "Percent_Developed_Medium", "Percent_Developed_High", "Agricultural_Acres",
+        "Barren_Acres", "Shrubland_Acres", "Grassland_Acres", "Forest_Acres", "Developed_Acres", "Developed_Open_Acres",
+        "Developed_Low_Acres", "Developed_Medium_Acres", "Developed_High_Acres", "Water_Acres", "Wetland_Acres",
         "Total_Acres"
     ]]
 
@@ -164,7 +164,7 @@ def change_area(in_geoscale, geoscale_field, in_nlcd, year_range):
 
     print("\tDropping extra columns")
     df = df[[
-        "Geoscale", "Geoscale_Name", "Year",  "Water_to_Forest_Acres", "Water_to_Developed_Acres",
+        "Geoscale", "Geoscale_Name", "Year", "Water_to_Forest_Acres", "Water_to_Developed_Acres",
         "Barren_to_Forest_Acres", "Barren_to_Developed_Acres", "Forest_to_Water_Acres", "Forest_to_Barren_Acres",
         "Forest_to_Brushland_Acres", "Forest_to_Grassland_Acres", "Forest_to_Agriculture_Acres",
         "Forest_to_Wetland_Acres", "Forest_to_Developed_Acres", "Brushland_to_Forest_Acres",

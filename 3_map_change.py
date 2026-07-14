@@ -24,13 +24,13 @@ csv_folder = base_folder / "int_tabulardata" / "landuse_int"
 arcpy.env.workspace = str(gis_folder)
 
 # Define variables
-source_year = 2025
+source_year = 2026
 nbep_year = 2026
-year_range = "2000-2024"
+year_range = "2000-2025"
 
 # Input files
-start_raster = "landuse_int.gdb/NLCD_2000_NBEP2025"
-end_raster = "landuse_int.gdb/NLCD_2024_NBEP2025"
+start_raster = "landuse_int.gdb/NLCD_2000_NBEP2026"
+end_raster = "landuse_int.gdb/NLCD_2025_NBEP2026"
 
 clip_boundaries = "landuse_int.gdb/geoscales/town_and_bay"
 colormap = Path.cwd() / "colormap.clr"

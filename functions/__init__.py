@@ -6,4 +6,4 @@ import pandas as pd
 arcpy.CheckOutExtension("3D")
 arcpy.CheckOutExtension("spatial")
 
-__all__ = ["prep_raster", "calc_area", "prep_csv"]
+__all__ = ["prep_raster", "calc_area", "prep_csv", "update_field"]
