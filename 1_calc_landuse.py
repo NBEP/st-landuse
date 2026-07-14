@@ -48,7 +48,7 @@ csv_final = "NLCD_" + str(nlcd_year) + "_NBEP2026.csv"
 temp_union = arcpy.env.scratchFolder + "/temp_union.shp"
 temp_buffer = arcpy.env.scratchFolder + "/temp_buffer.shp"
 temp_clip = arcpy.env.scratchFolder + "/temp_boundaries.shp"
-temp_nlcd = "temp_nlcd.tif"
+temp_nlcd = arcpy.env.scratchFolder + "/temp_nlcd.tif"
 temp_geoscale = arcpy.env.scratchFolder + "/temp_geoscale.shp"
 
 print("\nSETTING DEFAULT VALUES")
@@ -214,6 +214,6 @@ arcpy.management.ProjectRaster(
 )
 
 print("\nCLEARING SCRATCH FOLDER")
-arcpy.management.Delete([temp_union, temp_buffer, temp_clip, temp_nlcd, temp_geoscale])
+arcpy.Delete_management(arcpy.env.scratchFolder)
 
 print("\nDONE")
