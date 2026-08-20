@@ -4,7 +4,8 @@
 # Python 3.7
 #
 # Description:
-# TEXT HERE
+# Combines output csv files from 1_calc_landuse.py and calculates gross, percent change between years. Outputs a
+# separate csv file for each geoscale.
 #
 # REQUIRES GIS/ARCPY
 # ---------------------------------------------------------------------------

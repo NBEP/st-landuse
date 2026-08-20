@@ -4,7 +4,8 @@
 # Python 3.7
 #
 # Description:
-# TEXT HERE
+# Clips annual NLCD data to NBEP study boundaries and calculates the area of each land use class at seven different
+# geoscales. Outputs a single raster and csv.
 #
 # REQUIRES GIS/ARCPY
 # ---------------------------------------------------------------------------

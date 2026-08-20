@@ -4,7 +4,8 @@
 # Python 3.7
 #
 # Description:
-# TEXT HERE
+# Compares the output rasters from 1_calc_landuse.py for two years and tracks how each pixel has changed. Outputs
+# a raster and a csv.
 #
 # REQUIRES GIS/ARCPY
 # ---------------------------------------------------------------------------
