@@ -197,9 +197,9 @@ df_acres.replace(
 df_acres = df_acres[[
     "Geoscale", "Geoscale_Name", "Town", "State", "HUC10", "HUC10_Name", "HUC12", "HUC12_Name", "Basin", "Study_Area",
     "Year", "Percent_Forest", "Percent_Developed", "Percent_Developed_Open", "Percent_Developed_Low", 
-    "Percent_Developed_Medium", "Percent_Developed_High", "Agricultural_Acres", "Barren_Acres", "Shrubland_Acres", 
-    "Grassland_Acres", "Forest_Acres", "Developed_Acres", "Developed_Open_Acres", "Developed_Low_Acres", 
-    "Developed_Medium_Acres", "Developed_High_Acres", "Water_Acres", "Wetland_Acres", "Total_Acres"
+    "Percent_Developed_Medium", "Percent_Developed_High", "Forest_Acres", "Developed_Acres", "Developed_Open_Acres",
+    "Developed_Low_Acres", "Developed_Medium_Acres", "Developed_High_Acres", "Agricultural_Acres", "Barren_Acres",
+    "Grassland_Acres", "Shrubland_Acres", "Water_Acres", "Wetland_Acres", "Total_Acres"
 ]]
 
 print("\nDOWNLOADING FILES")

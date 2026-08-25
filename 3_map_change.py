@@ -27,10 +27,10 @@ arcpy.env.workspace = str(gis_folder)
 # Define variables
 source_year = 2026
 nbep_year = 2026
-year_range = "2000-2025"
+year_range = "1985-2025"
 
 # Input files
-start_raster = "landuse_int.gdb/NLCD_2000_NBEP2026"
+start_raster = "landuse_int.gdb/NLCD_1985_NBEP2026"
 end_raster = "landuse_int.gdb/NLCD_2025_NBEP2026"
 
 colormap = Path.cwd() / "colormap.clr"
@@ -47,8 +47,8 @@ town = str(geoscale_folder / "TOWNS_NBEP2017")
 town_studyarea = str(geoscale_folder / "TOWNS_ByStudyArea_NBEP2017")
 
 # Output files
-nlcd_final = "landuse_int.gdb/NLCD_2000_2025_NBEP2026"
-csv_final = "LanduseChange_2000_2025_NBEP2026.csv"
+nlcd_final = "landuse_int.gdb/NLCD_1985_2025_NBEP2026"
+csv_final = "LanduseChange_1985_2025_NBEP2026.csv"
 
 # RUN SCRIPT ----------------------------------------------------------------------------------------------------------
 temp_nlcd = arcpy.env.scratchFolder + "/temp_nlcd.tif"
