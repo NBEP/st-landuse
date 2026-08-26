@@ -30,8 +30,8 @@ nbep_year = 2026
 year_range = "1985-2025"
 
 # Input files
-start_raster = "landuse_int.gdb/NLCD_1985_NBEP2026"
-end_raster = "landuse_int.gdb/NLCD_2025_NBEP2026"
+start_raster = "landuse_int.gdb/LANDUSE_1985_NBEP2026"
+end_raster = "landuse_int.gdb/LANDUSE_2025_NBEP2026"
 
 colormap = Path.cwd() / "colormap.clr"
 
@@ -47,7 +47,7 @@ town = str(geoscale_folder / "TOWNS_NBEP2017")
 town_studyarea = str(geoscale_folder / "TOWNS_ByStudyArea_NBEP2017")
 
 # Output files
-nlcd_final = "landuse_int.gdb/NLCD_1985_2025_NBEP2026"
+nlcd_final = "landuse_int.gdb/LANDUSE_1985_2025_NBEP2026"
 csv_final = "LanduseChange_1985_2025_NBEP2026.csv"
 
 # RUN SCRIPT ----------------------------------------------------------------------------------------------------------

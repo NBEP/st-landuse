@@ -42,8 +42,8 @@ town_studyarea = str(geoscale_folder / "TOWNS_ByStudyArea_NBEP2017")
 bay = str(geoscale_folder / "BAYS_NBEP2017")
 
 # Define OUTPUTS
-nlcd_final = "landuse_int.gdb/NLCD_" + str(nlcd_year) + "_NBEP2026"
-csv_final = "NLCD_" + str(nlcd_year) + "_NBEP2026.csv"
+nlcd_final = "landuse_int.gdb/LANDUSE_" + str(nlcd_year) + "_NBEP2026"
+csv_final = "LANDUSE_" + str(nlcd_year) + "_NBEP2026.csv"
 
 # RUN SCRIPT ----------------------------------------------------------------------------------------------------------
 temp_union = arcpy.env.scratchFolder + "/temp_union.shp"

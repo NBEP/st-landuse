@@ -17,7 +17,8 @@ def prep_nlcd(in_features, out_features, clip_boundaries, colormap):
     arcpy.management.Clip(
         in_raster=in_features,
         in_template_dataset=clip_boundaries,
-        out_raster=temp_clip
+        out_raster=temp_clip,
+        clipping_geometry="ClippingGeometry"
     )
 
     print("\tReclassifying land use")

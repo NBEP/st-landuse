@@ -21,9 +21,9 @@ base_folder = Path.cwd().parents[2] / "Data" / "int_tabulardata" / "landuse_int"
 
 # Define variables
 in_csv = [
-    "NLCD_1985_NBEP2026.csv", "NLCD_1990_NBEP2026.csv", "NLCD_1995_NBEP2026.csv", "NLCD_2000_NBEP2026.csv",
-    "NLCD_2005_NBEP2026.csv", "NLCD_2010_NBEP2026.csv", "NLCD_2015_NBEP2026.csv", "NLCD_2020_NBEP2026.csv",
-    "NLCD_2025_NBEP2026.csv"
+    "LANDUSE_1985_NBEP2026.csv", "LANDUSE_1990_NBEP2026.csv", "LANDUSE_1995_NBEP2026.csv", "LANDUSE_2000_NBEP2026.csv",
+    "LANDUSE_2005_NBEP2026.csv", "LANDUSE_2010_NBEP2026.csv", "LANDUSE_2015_NBEP2026.csv", "LANDUSE_2020_NBEP2026.csv",
+    "LANDUSE_2025_NBEP2026.csv"
 ]
 
 source_year = 2026
@@ -32,7 +32,7 @@ nbep_year = 2026
 split_by_geoscale = True
 
 # Output files
-out_csv = base_folder / "NLCD_change_2000_2025_NBEP2026.csv"
+out_csv = base_folder / "LANDUSE_change_2000_2025_NBEP2026.csv"
 
 # RUN SCRIPT ----------------------------------------------------------------------------------------------------------
 print("\nIMPORTING DATA")
