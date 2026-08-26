@@ -213,6 +213,29 @@ arcpy.management.ProjectRaster(
     out_raster=nlcd_final,
     out_coor_system=arcpy.SpatialReference("NAD 1983 UTM Zone 19N")
 )
+print("\tAdjusting fields")
+arcpy.management.CalculateField(
+        in_table=nlcd_final,
+        field="LAND_USE",
+        expression="Reclass(!Value!)",
+        expression_type="PYTHON3",
+        code_block="""def Reclass(Value):
+            reclass = {
+                1: \"Water\",
+                21: \"Developed, Open Space\",
+                22: \"Developed, Low Intensity\",
+                23: \"Developed, Medium Intensity\",
+                24: \"Developed, High Intensity\",
+                3: \"Barren\",
+                4: \"Forest\",
+                5: \"Brushland\",
+                7: \"Grassland\",
+                8: \"Agriculture\",
+                9: \"Wetland\"
+            }
+            return reclass.get(Value)
+            """
+    )
 
 print("\nCLEARING SCRATCH FOLDER")
 arcpy.Delete_management(arcpy.env.scratchFolder)
