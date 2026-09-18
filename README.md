@@ -1,6 +1,6 @@
 # Land Use
 
-Python scripts used to process and analyze land use data for the [Narragansett Bay Estuary Program](https://www.nbep.org/)'s 2027 State of the Waterways report. 
+Python scripts used to process and analyze land use data for the [Narragansett Bay Estuary Program](https://www.nbep.org/)'s 2027 State of Our Waterways report. 
 
 ## Scripts
 
