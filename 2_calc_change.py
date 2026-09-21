@@ -74,7 +74,6 @@ df["Gross_Change_Shrubland_Acres"] = df["Shrubland_Acres"] - df["Shrubland_Acres
 df["Gross_Change_Water_Acres"] = df["Water_Acres"] - df["Water_Acres"].shift(1)
 df["Gross_Change_Wetland_Acres"] = df["Wetland_Acres"] - df["Wetland_Acres"].shift(1)
 df["Percent_Change_Forest"] = df["Gross_Change_Forest_Acres"] / df["Forest_Acres"].shift(1) * 100
-df["Percent_Change_Agriculture"] = (df["Gross_Change_Agriculture_Acres"] / df["Agriculture_Acres"].shift(1) * 100)
 df["Percent_Change_Developed"] = df["Gross_Change_Developed_Acres"] / df["Developed_Acres"].shift(1) * 100
 df["Percent_Change_Developed_Open"] = (
         df["Gross_Change_Developed_Open_Acres"] / df["Developed_Open_Acres"].shift(1) * 100
@@ -95,13 +94,12 @@ df["Year"] = df.Prev_Year.astype(str) + "-" + df.Year.astype(str)
 df["Year"] = df["Year"].str.replace(".0", "", regex=False)
 keep_cols = [
     "Geoscale", "Geoscale_Name", "Town", "State", "HUC12", "HUC12_Name", "HUC10", "HUC10_Name", "Basin", "Study_Area",
-    "Year", "Percent_Change_Forest", "Percent_Change_Agriculture", "Percent_Change_Developed",
-    "Percent_Change_Developed_Open", "Percent_Change_Developed_Low", "Percent_Change_Developed_Medium",
-    "Percent_Change_Developed_High", "Gross_Change_Forest_Acres", "Gross_Change_Developed_Acres",
-    "Gross_Change_Developed_Open_Acres", "Gross_Change_Developed_Low_Acres", "Gross_Change_Developed_Medium_Acres",
-    "Gross_Change_Developed_High_Acres", "Gross_Change_Agriculture_Acres", "Gross_Change_Barren_Acres",
-    "Gross_Change_Grassland_Acres", "Gross_Change_Shrubland_Acres", "Gross_Change_Water_Acres",
-    "Gross_Change_Wetland_Acres"
+    "Year", "Percent_Change_Forest", "Percent_Change_Developed", "Percent_Change_Developed_Open",
+    "Percent_Change_Developed_Low", "Percent_Change_Developed_Medium", "Percent_Change_Developed_High",
+    "Gross_Change_Forest_Acres", "Gross_Change_Developed_Acres", "Gross_Change_Developed_Open_Acres",
+    "Gross_Change_Developed_Low_Acres", "Gross_Change_Developed_Medium_Acres", "Gross_Change_Developed_High_Acres",
+    "Gross_Change_Agriculture_Acres", "Gross_Change_Barren_Acres", "Gross_Change_Grassland_Acres",
+    "Gross_Change_Shrubland_Acres", "Gross_Change_Water_Acres", "Gross_Change_Wetland_Acres"
 ]
 df = df.reindex(columns=keep_cols)
 
