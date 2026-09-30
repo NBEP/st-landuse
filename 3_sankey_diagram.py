@@ -20,10 +20,9 @@ from functions import *
 arcpy.env.overwriteOutput = True
 
 # Set working directory, projection --------------------------------------------
-base_folder = Path.cwd().parents[2] / "Data"
-gis_folder = base_folder / "int_gisdata" / "landuse_int"
-csv_folder = base_folder / "int_tabulardata" / "landuse_int"
-arcpy.env.workspace = str(gis_folder)
+base_folder = Path.cwd().parents[2] / "Data" / "land_use"
+csv_folder = base_folder / "int_tabulardata"
+arcpy.env.workspace = str(base_folder / "int_gisdata")
 
 # Define variables
 source_year = 2026
@@ -37,7 +36,7 @@ end_raster = "landuse_int.gdb/LANDUSE_2025_NBEP2026"
 colormap = Path.cwd() / "colormap.clr"
 
 # Define INPUTS - GEOSCALES
-geoscale_folder = base_folder / "int_gisdata" / "geoscale_int" / "geoscale_int.gdb"
+geoscale_folder = base_folder / "int_gisdata" / "geoscale_int.gdb"
 
 studyarea = str(geoscale_folder / "STUDYAREAS_NBEP2017")
 basins = str(geoscale_folder / "BASINS_NBEP2017")
@@ -65,7 +64,7 @@ nlcd_change = arcpy.ia.ComputeChangeRaster(
     define_transition_colors="TO_COLOR"
 )
 print("\tSaving")
-nlcd_change.save(str(gis_folder / nlcd_final))
+nlcd_change.save(nlcd_final)
 print("\tUpdating fields")
 with arcpy.da.UpdateCursor(nlcd_final, field_names="Class_Name") as cursor:
     for row in cursor:

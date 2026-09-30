@@ -17,7 +17,7 @@ import pandas as pd
 from functions import prep_csv
 
 # Set working directory, projection --------------------------------------------
-base_folder = Path.cwd().parents[2] / "Data" / "int_tabulardata" / "landuse_int"
+base_folder = Path.cwd().parents[2] / "Data" / "land_use" / "int_tabulardata"
 
 # Define variables
 in_csv = [

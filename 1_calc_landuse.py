@@ -19,9 +19,9 @@ from functions import *
 arcpy.env.overwriteOutput = True
 
 # Set working directory, projection --------------------------------------------
-base_folder = Path.cwd().parents[2] / "Data"
-csv_folder = base_folder / "int_tabulardata" / "landuse_int"
-arcpy.env.workspace = str(base_folder / "int_gisdata" / "landuse_int")
+base_folder = Path.cwd().parents[2] / "Data" / "land_use"
+csv_folder = base_folder / "int_tabulardata"
+arcpy.env.workspace = str(base_folder / "int_gisdata")
 
 # Define INPUTS
 nlcd_year = 2025
@@ -30,7 +30,7 @@ nlcd = "Annual_NLCD_LndCov_" + str(nlcd_year) + "_CU_C1V2/Annual_NLCD_LndCov_" +
 colormap = Path.cwd() / "colormap.clr"
 
 # Define INPUTS - GEOSCALES
-geoscale_folder = base_folder / "int_gisdata" / "geoscale_int" / "geoscale_int.gdb"
+geoscale_folder = base_folder / "int_gisdata" / "geoscale_int.gdb"
 
 studyarea = str(geoscale_folder / "STUDYAREAS_NBEP2017")
 basins = str(geoscale_folder / "BASINS_NBEP2017")
